@@ -1,14 +1,20 @@
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
+
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const _ = require("lodash");
 const app = express();
+const DEFAULT_LIST = "Goals for today";
+import keys from "./keys.js"
 
 app.set('view engine', 'ejs');
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
-mongoose.connect("mongodb://localhost:27017/todolistDB", {useNewUrlParser: true});
+mongoose.connect("mongodb+srv://admin-paulina:" + keys.ADMIN_PASSWORD +"@cluster0.6mzqw.mongodb.net/todoListDB", {useNewUrlParser: true});
+//mongoose.connect("mongodb://localhost:27017/todolistDB", {useNewUrlParser: true});
 
 const itemsSchema = {
   name: String
@@ -53,7 +59,7 @@ app.get("/", function(req, res) {
       });
       res.redirect("/");
     } else {
-      res.render("list", {listTitle: "Goals for today", newListItems: foundItems});
+      res.render("list", {listTitle: DEFAULT_LIST, newListItems: foundItems});
     }
   });
 
@@ -80,8 +86,6 @@ app.get("/:customListName", function(req, res){
     }
   });
 
-
-
 });
 
 app.post("/", function(req, res){
@@ -93,7 +97,7 @@ app.post("/", function(req, res){
     name: itemName
   });
 
-  if (listName === "Today"){
+  if (listName === DEFAULT_LIST){
     item.save();
     res.redirect("/");
   } else {
@@ -109,7 +113,7 @@ app.post("/delete", function(req, res){
   const checkedItemId = req.body.checkbox;
   const listName = req.body.listName;
 
-  if (listName === "Today") {
+  if (listName === DEFAULT_LIST) {
     Item.findByIdAndRemove(checkedItemId, function(err){
       if (!err) {
         console.log("Successfully deleted checked item.");
