@@ -13,7 +13,7 @@ app.set('view engine', 'ejs');
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
-mongoose.connect("mongodb+srv://admin-paulina:" + keys.ADMIN_PASSWORD +"@cluster0.6mzqw.mongodb.net/todoListDB", {useNewUrlParser: true});
+mongoose.connect("mongodb+srv://admin-paulina:" + "ToOG5jEZvHAknOUp" +"@cluster0.6mzqw.mongodb.net/todoListDB", {useNewUrlParser: true});
 //mongoose.connect("mongodb://localhost:27017/todolistDB", {useNewUrlParser: true});
 
 const itemsSchema = {
